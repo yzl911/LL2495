@@ -298,4 +298,107 @@
         })
     </script>
 </body>
-</html>
+<head>
+<mead charset="UTF-8>
+<meta name=" content="width=device-width,initial-scale=1.0">
+<title>计时器</title>
+<style>
+     * {
+        margin:0;
+        padding:0;
+        box-sizing:bordorder-box;
+         }
+        body {
+            width:100vw;
+            height:100vh;
+            background:#0f172a;
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        .timer-text {
+            font-size: 80px;
+            color: #ff9500;
+            letter-spacing: 4px;
+            text-shadow: 0 0 12px #ff9500;
+            margin-bottom: 30px;
+        }
+        .btn-group button {
+            font-size: 18px;
+            padding: 10px 24px;
+            margin: 0 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #fff;
+        }
+        #startBtn {
+            background-color: #2ecc71;
+        }
+        #pauseBtn {
+            background-color: #f39c12;
+        }
+        #resetBtn {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-text" id="stopTime">00:00:00.00</div>
+    <div class="btn-group">
+        <button id="startBtn">开始</button>
+        <button id="pauseBtn">暂停</button>
+        <button id="resetBtn">重置</button>
+    </div>
+
+    <script>
+        let timer = null;
+        let startTime = 0;
+        let elapsedTime = 0;
+        let running = false;
+        const stopDom = document.getElementById('stopTime');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // 格式化时间 时:分:秒.毫秒
+        function formatTime(ms) {
+            const totalSec = Math.floor(ms / 1000);
+            const hour = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+            const min = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+            const sec = String(totalSec % 60).padStart(2, '0');
+            const msec = String(Math.floor((ms % 1000) / 10)).padStart(2, '0');
+            return `${hour}:${min}:${sec}.${msec}`;
+        }
+
+        function updateTimer() {
+            elapsedTime = Date.now() - startTime;
+            stopDom.textContent = formatTime(elapsedTime);
+        }
+
+        startBtn.onclick = () => {
+            if (!running) {
+                running = true;
+                startTime = Date.now() - elapsedTime;
+                timer = setInterval(updateTimer, 10);
+            }
+        }
+
+        pauseBtn.onclick = () => {
+            if (running) {
+                running = false;
+                clearInterval(timer);
+            }
+        }
+
+        resetBtn.onclick = () => {
+            clearInterval(timer);
+            running = false;
+            elapsedTime = 0;
+            stopDom.textContent = "00:00:00.00";
+        }
+    </script>
+</body>
+</html> 
