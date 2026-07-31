@@ -1,4 +1,34 @@
 <!DOCTYPE html>
+<head><meta charset="UTF-8"><title>可拖动窗口</title></head>
+<body>
+
+<!-- ===== 可拖动窗口 ===== -->
+<div id="win" style="position:fixed;width:320px;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.25);top:60px;left:60px;font-family:system-ui;overflow:hidden;">
+  <!-- 标题栏（拖动手柄） -->
+  <div id="bar" style="height:40px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;line-height:40px;padding:0 18px;cursor:grab;user-select:none;font-weight:600;letter-spacing:.3px;"
+       onmousedown="d(event)">✧ 拖动我</div>
+  <!-- 内容 -->
+  <div style="padding:24px 20px 28px;color:#333;background:#fafafa;border-top:1px solid #eee;">
+    <p style="margin:0 0 8px;font-size:15px;">内容区域 · 点击标题栏拖动</p>
+    <p style="margin:0;font-size:13px;color:#888;">松开鼠标停止拖动</p>
+  </div>
+</div>
+
+<script>
+  // —— 最简拖动 ——
+  let ox, oy, el = win;
+  function d(e) {
+    ox = e.clientX - el.offsetLeft;
+    oy = e.clientY - el.offsetTop;
+    document.onmousemove = function(e) {
+      el.style.left = e.clientX - ox + 'px';
+      el.style.top = e.clientY - oy + 'px';
+    };
+    document.onmouseup = function() { document.onmousemove = null; };
+  }
+</script>
+
+</body>
   <body>
   <h1>yzl</h1>
   <h2>Introduction</h2>
