@@ -19,29 +19,85 @@
             padding: 40px 15px;
         }
 
-        /* ========== 可拖动窗口样式 ========== */
-        .draggable-window {
+        /* ========== 可拖动计算器窗口样式 ========== */
+        .calculator-window {
             position: absolute;
             top: 50px;
             left: 50px;
-            width: 300px;
+            width: 320px;
             background: #1e293b;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            z-index: 100;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            z-index: 1000;
             user-select: none;
+            overflow: hidden;
         }
-        .window-header {
-            padding: 12px 16px;
+        .calc-header {
+            padding: 14px 16px;
             background: #334155;
             color: #fff;
             cursor: move;
-            border-radius: 8px 8px 0 0;
             font-weight: bold;
+            font-size: 16px;
+            text-align: center;
         }
-        .window-content {
-            padding: 20px;
-            color: #cbd5e1;
+        .calc-display {
+            padding: 20px 16px;
+            text-align: right;
+            font-size: 32px;
+            color: #fff;
+            background: #0f172a;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 12px;
+        }
+        .calc-btn {
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-weight: 500;
+        }
+        .calc-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+        .calc-btn:active {
+            transform: translateY(0);
+        }
+        .btn-number {
+            background: #475569;
+            color: #fff;
+        }
+        .btn-operator {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .btn-clear {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-backspace {
+            background: #64748b;
+            color: #fff;
+        }
+        .btn-equals {
+            background: #10b981;
+            color: #fff;
+        }
+        .btn-zero {
+            grid-column: span 2;
         }
 
         /* ========== 数字时钟样式 ========== */
@@ -61,7 +117,7 @@
             text-shadow: 0 0 12px #38bdf8;
         }
 
-        /* ========== 第一套相册样式（原始版本1） ========== */
+        /* ========== 第一套相册样式（在线相册） ========== */
         .gallery-section-1 h1 {
             color: #fff;
             text-align: center;
@@ -120,7 +176,7 @@
             cursor: pointer;
         }
 
-        /* ========== 第二套相册样式（原始版本2） ========== */
+        /* ========== 第二套相册样式（本地相册） ========== */
         .gallery-section-2 {
             margin-top: 80px;
         }
@@ -221,12 +277,34 @@
 </head>
 <body>
 
-    <!-- 可拖动窗口 -->
-    <div class="draggable-window" id="win">
-        <div class="window-header" id="winHeader">✧ 拖动我</div>
-        <div class="window-content">
-            内容区域 · 点击标题栏拖动<br>
-            松开鼠标停止拖动
+    <!-- 可拖动计算器窗口 -->
+    <div class="calculator-window" id="calcWin">
+        <div class="calc-header" id="calcHeader">🧮 计算器（拖动标题栏移动）</div>
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-buttons">
+            <button class="calc-btn btn-clear" onclick="clearCalc()">C</button>
+            <button class="calc-btn btn-backspace" onclick="backspace()">←</button>
+            <button class="calc-btn btn-operator" onclick="appendOperator('%')">%</button>
+            <button class="calc-btn btn-operator" onclick="appendOperator('/')">÷</button>
+            
+            <button class="calc-btn btn-number" onclick="appendNumber('7')">7</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('8')">8</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('9')">9</button>
+            <button class="calc-btn btn-operator" onclick="appendOperator('*')">×</button>
+            
+            <button class="calc-btn btn-number" onclick="appendNumber('4')">4</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('5')">5</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('6')">6</button>
+            <button class="calc-btn btn-operator" onclick="appendOperator('-')">−</button>
+            
+            <button class="calc-btn btn-number" onclick="appendNumber('1')">1</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('2')">2</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('3')">3</button>
+            <button class="calc-btn btn-operator" onclick="appendOperator('+')">+</button>
+            
+            <button class="calc-btn btn-number btn-zero" onclick="appendNumber('0')">0</button>
+            <button class="calc-btn btn-number" onclick="appendNumber('.')">.</button>
+            <button class="calc-btn btn-equals" onclick="calculate()">=</button>
         </div>
     </div>
 
@@ -236,7 +314,7 @@
         <div class="clock-time" id="timeBox"></div>
     </div>
 
-    <!-- 第一套相册（原始版本1） -->
+    <!-- 第一套相册（在线相册） -->
     <div class="gallery-section-1">
         <h1>我的相册</h1>
         <div class="photo-gallery">
@@ -261,7 +339,7 @@
         <img id="previewImg" alt="大图预览">
     </div>
 
-    <!-- 第二套相册（原始版本2） -->
+    <!-- 第二套相册（本地相册） -->
     <div class="gallery-section-2">
         <h2>我的本地相册</h2>
         <div class="gallery">
@@ -294,11 +372,11 @@
     </div>
 
     <script>
-        // ========== 可拖动窗口功能 ==========
+        // ========== 拖动计算器窗口功能 ==========
         (function() {
             let ox, oy;
-            const el = document.getElementById('win');
-            const header = document.getElementById('winHeader');
+            const el = document.getElementById('calcWin');
+            const header = document.getElementById('calcHeader');
 
             header.onmousedown = function(e) {
                 ox = e.clientX - el.offsetLeft;
@@ -311,8 +389,66 @@
                     document.onmousemove = null;
                     document.onmouseup = null;
                 };
+                e.preventDefault(); // 防止拖动时选中文本
             };
         })();
+
+        // ========== 计算器功能 ==========
+        let calcExpression = '';
+        const calcDisplay = document.getElementById('calcDisplay');
+
+        function updateDisplay() {
+            calcDisplay.textContent = calcExpression || '0';
+        }
+
+        function appendNumber(num) {
+            // 防止多个小数点
+            if (num === '.' && calcExpression.split(/[\+\-\*\/\%]/).pop().includes('.')) {
+                return;
+            }
+            // 开头是0的情况，除非是小数点
+            if (calcExpression === '0' && num !== '.') {
+                calcExpression = num;
+            } else {
+                calcExpression += num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (calcExpression === '') return;
+            // 如果最后一个是运算符，直接替换
+            const lastChar = calcExpression.slice(-1);
+            if (['+', '-', '*', '/', '%'].includes(lastChar)) {
+                calcExpression = calcExpression.slice(0, -1) + op;
+            } else {
+                calcExpression += op;
+            }
+            updateDisplay();
+        }
+
+        function clearCalc() {
+            calcExpression = '';
+            updateDisplay();
+        }
+
+        function backspace() {
+            calcExpression = calcExpression.slice(0, -1);
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                let result = eval(calcExpression);
+                // 处理浮点数精度问题，保留8位有效数字
+                result = Math.round(result * 100000000) / 100000000;
+                calcExpression = result.toString();
+                updateDisplay();
+            } catch (e) {
+                calcDisplay.textContent = '错误';
+                calcExpression = '';
+            }
+        }
 
         // ========== 数字时钟功能 ==========
         function syncClock(){
@@ -333,7 +469,7 @@
         syncClock();
         setInterval(syncClock, 1000);
 
-        // ========== 第一套相册JS（原始版本1） ==========
+        // ========== 第一套相册JS ==========
         const preview = document.getElementById("preview");
         const previewImg = document.getElementById("previewImg");
         
@@ -350,7 +486,7 @@
             if(e.target === preview) closePreview();
         });
 
-        // ========== 第二套相册JS（原始版本2） ==========
+        // ========== 第二套相册JS ==========
         const mask = document.getElementById('mask');
         const bigImg = document.getElementById('bigImage');
         
