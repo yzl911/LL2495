@@ -100,6 +100,72 @@
             grid-column: span 2;
         }
 
+        /* ========== 可拖动记事本窗口样式 ========== */
+        .notepad-window {
+            position: absolute;
+            top: 50px;
+            left: 400px;
+            width: 350px;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            z-index: 999;
+            user-select: none;
+            overflow: hidden;
+        }
+        .notepad-header {
+            padding: 14px 16px;
+            background: #334155;
+            color: #fff;
+            cursor: move;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notepad-clear-btn {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: opacity 0.2s;
+        }
+        .notepad-clear-btn:hover {
+            opacity: 0.8;
+        }
+        .notepad-content {
+            padding: 12px;
+        }
+        #notepadText {
+            width: 100%;
+            height: 280px;
+            background: #0f172a;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            outline: none;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        #notepadText:focus {
+            border-color: #38bdf8;
+        }
+        .notepad-status {
+            text-align: right;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 8px;
+            padding-right: 4px;
+        }
+
         /* ========== 数字时钟样式 ========== */
         .clock-section {
             text-align: center;
@@ -308,6 +374,18 @@
         </div>
     </div>
 
+    <!-- 可拖动记事本窗口 -->
+    <div class="notepad-window" id="notepadWin">
+        <div class="notepad-header" id="notepadHeader">
+            <span>📝 便签记事本</span>
+            <button class="notepad-clear-btn" onclick="clearNotepad()">清空</button>
+        </div>
+        <div class="notepad-content">
+            <textarea id="notepadText" placeholder="在这里输入内容，自动保存到本地..."></textarea>
+            <div class="notepad-status" id="notepadStatus">已保存</div>
+        </div>
+    </div>
+
     <!-- 数字时钟 -->
     <div class="clock-section">
         <div class="clock-date" id="dateBox"></div>
@@ -393,6 +471,30 @@
             };
         })();
 
+        // ========== 拖动记事本窗口功能 ==========
+        (function() {
+            let ox, oy;
+            const el = document.getElementById('notepadWin');
+            const header = document.getElementById('notepadHeader');
+
+            header.onmousedown = function(e) {
+                // 点击清空按钮时不触发拖动
+                if (e.target.classList.contains('notepad-clear-btn')) return;
+                
+                ox = e.clientX - el.offsetLeft;
+                oy = e.clientY - el.offsetTop;
+                document.onmousemove = function(e) {
+                    el.style.left = e.clientX - ox + 'px';
+                    el.style.top = e.clientY - oy + 'px';
+                };
+                document.onmouseup = function() {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                };
+                e.preventDefault(); // 防止拖动时选中文本
+            };
+        })();
+
         // ========== 计算器功能 ==========
         let calcExpression = '';
         const calcDisplay = document.getElementById('calcDisplay');
@@ -449,6 +551,43 @@
                 calcExpression = '';
             }
         }
+
+        // ========== 记事本功能 ==========
+        const notepadText = document.getElementById('notepadText');
+        const notepadStatus = document.getElementById('notepadStatus');
+        let saveTimer = null;
+
+        // 加载保存的内容
+        function loadNotepad() {
+            const saved = localStorage.getItem('notepad_content');
+            if (saved) {
+                notepadText.value = saved;
+            }
+        }
+
+        // 自动保存（输入后延迟500ms保存）
+        function autoSave() {
+            notepadStatus.textContent = '保存中...';
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => {
+                localStorage.setItem('notepad_content', notepadText.value);
+                notepadStatus.textContent = '已保存';
+            }, 500);
+        }
+
+        // 清空记事本
+        function clearNotepad() {
+            if (confirm('确定要清空所有内容吗？')) {
+                notepadText.value = '';
+                localStorage.removeItem('notepad_content');
+                notepadStatus.textContent = '已清空';
+            }
+        }
+
+        // 监听输入事件
+        notepadText.addEventListener('input', autoSave);
+        // 页面加载时读取内容
+        loadNotepad();
 
         // ========== 数字时钟功能 ==========
         function syncClock(){
