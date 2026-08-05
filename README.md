@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LL2495 前端Demo合集</title>
+    <title>LL2495 工具合集</title>
     <style>
         * {
             margin: 0;
@@ -12,19 +12,15 @@
         }
 
         body {
-            width: 100vw;
             min-height: 100vh;
             background: #0f172a;
             font-family: Arial, sans-serif;
             padding: 40px 15px;
         }
 
-        /* ========== 可拖动计算器窗口样式 ========== */
-        .calculator-window {
+        /* ========== 可拖动窗口通用样式 ========== */
+        .draggable-window {
             position: absolute;
-            top: 50px;
-            left: 50px;
-            width: 320px;
             background: #1e293b;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
@@ -32,7 +28,7 @@
             user-select: none;
             overflow: hidden;
         }
-        .calc-header {
+        .window-header {
             padding: 14px 16px;
             background: #334155;
             color: #fff;
@@ -40,6 +36,13 @@
             font-weight: bold;
             font-size: 16px;
             text-align: center;
+        }
+
+        /* ========== 计算器 ========== */
+        #calcWin {
+            top: 50px;
+            left: 50px;
+            width: 320px;
         }
         .calc-display {
             padding: 20px 16px;
@@ -68,59 +71,24 @@
             cursor: pointer;
             transition: all 0.15s ease;
             font-weight: 500;
-        }
-        .calc-btn:hover {
-            opacity: 0.85;
-            transform: translateY(-1px);
-        }
-        .calc-btn:active {
-            transform: translateY(0);
-        }
-        .btn-number {
-            background: #475569;
             color: #fff;
         }
-        .btn-operator {
-            background: #f59e0b;
-            color: #fff;
-        }
-        .btn-clear {
-            background: #ef4444;
-            color: #fff;
-        }
-        .btn-backspace {
-            background: #64748b;
-            color: #fff;
-        }
-        .btn-equals {
-            background: #10b981;
-            color: #fff;
-        }
-        .btn-zero {
-            grid-column: span 2;
-        }
+        .calc-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .calc-btn:active { transform: translateY(0); }
+        .btn-number { background: #475569; }
+        .btn-operator { background: #f59e0b; }
+        .btn-clear { background: #ef4444; }
+        .btn-backspace { background: #64748b; }
+        .btn-equals { background: #10b981; }
+        .btn-zero { grid-column: span 2; }
 
-        /* ========== 可拖动记事本窗口样式 ========== */
-        .notepad-window {
-            position: absolute;
+        /* ========== 记事本 ========== */
+        #notepadWin {
             top: 50px;
-            left: 400px;
+            right: 50px;
             width: 350px;
-            background: #1e293b;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            z-index: 999;
-            user-select: none;
-            overflow: hidden;
         }
         .notepad-header {
-            padding: 14px 16px;
-            background: #334155;
-            color: #fff;
-            cursor: move;
-            font-weight: bold;
-            font-size: 16px;
-            text-align: center;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -135,12 +103,8 @@
             font-size: 12px;
             transition: opacity 0.2s;
         }
-        .notepad-clear-btn:hover {
-            opacity: 0.8;
-        }
-        .notepad-content {
-            padding: 12px;
-        }
+        .notepad-clear-btn:hover { opacity: 0.8; }
+        .notepad-content { padding: 12px; }
         #notepadText {
             width: 100%;
             height: 280px;
@@ -153,11 +117,8 @@
             line-height: 1.6;
             resize: none;
             outline: none;
-            font-family: system-ui, -apple-system, sans-serif;
         }
-        #notepadText:focus {
-            border-color: #38bdf8;
-        }
+        #notepadText:focus { border-color: #38bdf8; }
         .notepad-status {
             text-align: right;
             font-size: 12px;
@@ -166,10 +127,57 @@
             padding-right: 4px;
         }
 
-        /* ========== 数字时钟样式 ========== */
+        /* ========== 中央搜索框 ========== */
+        .search-container {
+            max-width: 600px;
+            margin: 120px auto 60px;
+            text-align: center;
+        }
+        .search-title {
+            color: #fff;
+            font-size: 48px;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #334155;
+            border-radius: 30px;
+            background: #1e293b;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus {
+            border-color: #38bdf8;
+        }
+        .search-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            background: #38bdf8;
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .search-btn:hover {
+            background: #0ea5e9;
+            transform: translateY(-1px);
+        }
+
+        /* ========== 数字时钟 ========== */
         .clock-section {
             text-align: center;
-            margin: 80px 0 60px;
+            margin-bottom: 60px;
         }
         .clock-date {
             color: #94a3b8;
@@ -183,135 +191,13 @@
             text-shadow: 0 0 12px #38bdf8;
         }
 
-        /* ========== 第一套相册样式（在线相册） ========== */
-        .gallery-section-1 h1 {
-            color: #fff;
+        /* ========== 计时器 ========== */
+        .timer-section {
             text-align: center;
             margin-bottom: 40px;
         }
-        .photo-gallery {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
-            gap: 16px;
-        }
-        .photo-item {
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            background: #1e293b;
-            height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-        }
-        .photo-item:hover {
-            transform: scale(1.04);
-        }
-        .photo-item img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            display: block;
-        }
-        /* 点击放大弹窗 - 第一套 */
-        .preview-box {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.92);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            padding: 20px;
-        }
-        .preview-box img {
-            max-width: 95%;
-            max-height: 95%;
-            border-radius: 6px;
-        }
-        .preview-box .close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #fff;
-            font-size: 35px;
-            cursor: pointer;
-        }
-
-        /* ========== 第二套相册样式（本地相册） ========== */
-        .gallery-section-2 {
-            margin-top: 80px;
-        }
-        .gallery-section-2 h2 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .gallery {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 18px;
-        }
-        .img-item {
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            background: #1e293b;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-        }
-        .img-item:hover {
-            transform: scale(1.05);
-        }
-        .img-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-        /* 大图弹窗 - 第二套 */
-        .mask {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-        .mask img {
-            max-width: 95%;
-            max-height: 95vh;
-        }
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 40px;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        /* ========== 计时器样式 ========== */
-        .timer-section {
-            margin: 80px 0;
-            text-align: center;
-        }
         .timer-text {
-            font-size: 80px;
+            font-size: 60px;
             color: #ff9500;
             letter-spacing: 4px;
             text-shadow: 0 0 12px #ff9500;
@@ -327,25 +213,17 @@
             color: #fff;
             transition: opacity 0.2s;
         }
-        .btn-group button:hover {
-            opacity: 0.9;
-        }
-        #startBtn {
-            background-color: #2ecc71;
-        }
-        #pauseBtn {
-            background-color: #f39c12;
-        }
-        #resetBtn {
-            background-color: #e74c3c;
-        }
+        .btn-group button:hover { opacity: 0.9; }
+        #startBtn { background-color: #2ecc71; }
+        #pauseBtn { background-color: #f39c12; }
+        #resetBtn { background-color: #e74c3c; }
     </style>
 </head>
 <body>
 
-    <!-- 可拖动计算器窗口 -->
-    <div class="calculator-window" id="calcWin">
-        <div class="calc-header" id="calcHeader">🧮 计算器（拖动标题栏移动）</div>
+    <!-- 计算器窗口 -->
+    <div class="draggable-window" id="calcWin">
+        <div class="window-header calc-header">🧮 计算器</div>
         <div class="calc-display" id="calcDisplay">0</div>
         <div class="calc-buttons">
             <button class="calc-btn btn-clear" onclick="clearCalc()">C</button>
@@ -374,69 +252,31 @@
         </div>
     </div>
 
-    <!-- 可拖动记事本窗口 -->
-    <div class="notepad-window" id="notepadWin">
-        <div class="notepad-header" id="notepadHeader">
-            <span>📝 便签记事本</span>
+    <!-- 记事本窗口 -->
+    <div class="draggable-window" id="notepadWin">
+        <div class="window-header notepad-header">
+            <span>📝 便签</span>
             <button class="notepad-clear-btn" onclick="clearNotepad()">清空</button>
         </div>
         <div class="notepad-content">
-            <textarea id="notepadText" placeholder="在这里输入内容，自动保存到本地..."></textarea>
+            <textarea id="notepadText" placeholder="输入内容自动保存..."></textarea>
             <div class="notepad-status" id="notepadStatus">已保存</div>
         </div>
+    </div>
+
+    <!-- 中央搜索框 -->
+    <div class="search-container">
+        <h1 class="search-title">Google 搜索</h1>
+        <form class="search-form" onsubmit="googleSearch(event)">
+            <input type="text" class="search-input" id="searchInput" placeholder="输入搜索内容..." autofocus>
+            <button type="submit" class="search-btn">搜索</button>
+        </form>
     </div>
 
     <!-- 数字时钟 -->
     <div class="clock-section">
         <div class="clock-date" id="dateBox"></div>
         <div class="clock-time" id="timeBox"></div>
-    </div>
-
-    <!-- 第一套相册（在线相册） -->
-    <div class="gallery-section-1">
-        <h1>我的相册</h1>
-        <div class="photo-gallery">
-            <div class="photo-item" onclick="openPreview(this)">
-                <img src="https://picsum.photos/400/300?random=1" alt="图片1">
-            </div>
-            <div class="photo-item" onclick="openPreview(this)">
-                <img src="https://picsum.photos/400/300?random=2" alt="图片2">
-            </div>
-            <div class="photo-item" onclick="openPreview(this)">
-                <img src="https://picsum.photos/400/300?random=3" alt="图片3">
-            </div>
-            <div class="photo-item" onclick="openPreview(this)">
-                <img src="https://picsum.photos/400/300?random=4" alt="图片4">
-            </div>
-        </div>
-    </div>
-
-    <!-- 第一套相册的放大弹窗 -->
-    <div class="preview-box" id="preview">
-        <span class="close" onclick="closePreview()">×</span>
-        <img id="previewImg" alt="大图预览">
-    </div>
-
-    <!-- 第二套相册（本地相册） -->
-    <div class="gallery-section-2">
-        <h2>我的本地相册</h2>
-        <div class="gallery">
-            <div class="img-item" onclick="openBigImg(this)">
-                <img src="1.jpg" alt="本地图片1">
-            </div>
-            <div class="img-item" onclick="openBigImg(this)">
-                <img src="2.jpg" alt="本地图片2">
-            </div>
-            <div class="img-item" onclick="openBigImg(this)">
-                <img src="3.jpg" alt="本地图片3">
-            </div>
-        </div>
-    </div>
-
-    <!-- 第二套相册的放大弹窗 -->
-    <div class="mask" id="mask">
-        <span class="close-btn" onclick="closeImg()">×</span>
-        <img id="bigImage" alt="大图预览">
     </div>
 
     <!-- 计时器 -->
@@ -450,39 +290,18 @@
     </div>
 
     <script>
-        // ========== 拖动计算器窗口功能 ==========
-        (function() {
-            let ox, oy;
-            const el = document.getElementById('calcWin');
-            const header = document.getElementById('calcHeader');
-
+        // ========== 通用拖动功能 ==========
+        function makeDraggable(windowId, headerSelector) {
+            const el = document.getElementById(windowId);
+            const header = el.querySelector(headerSelector);
+            
             header.onmousedown = function(e) {
-                ox = e.clientX - el.offsetLeft;
-                oy = e.clientY - el.offsetTop;
-                document.onmousemove = function(e) {
-                    el.style.left = e.clientX - ox + 'px';
-                    el.style.top = e.clientY - oy + 'px';
-                };
-                document.onmouseup = function() {
-                    document.onmousemove = null;
-                    document.onmouseup = null;
-                };
-                e.preventDefault(); // 防止拖动时选中文本
-            };
-        })();
-
-        // ========== 拖动记事本窗口功能 ==========
-        (function() {
-            let ox, oy;
-            const el = document.getElementById('notepadWin');
-            const header = document.getElementById('notepadHeader');
-
-            header.onmousedown = function(e) {
-                // 点击清空按钮时不触发拖动
-                if (e.target.classList.contains('notepad-clear-btn')) return;
+                // 点击按钮时不触发拖动
+                if (e.target.tagName === 'BUTTON') return;
                 
-                ox = e.clientX - el.offsetLeft;
-                oy = e.clientY - el.offsetTop;
+                const ox = e.clientX - el.offsetLeft;
+                const oy = e.clientY - el.offsetTop;
+                
                 document.onmousemove = function(e) {
                     el.style.left = e.clientX - ox + 'px';
                     el.style.top = e.clientY - oy + 'px';
@@ -491,9 +310,11 @@
                     document.onmousemove = null;
                     document.onmouseup = null;
                 };
-                e.preventDefault(); // 防止拖动时选中文本
+                e.preventDefault();
             };
-        })();
+        }
+        makeDraggable('calcWin', '.calc-header');
+        makeDraggable('notepadWin', '.notepad-header');
 
         // ========== 计算器功能 ==========
         let calcExpression = '';
@@ -504,11 +325,7 @@
         }
 
         function appendNumber(num) {
-            // 防止多个小数点
-            if (num === '.' && calcExpression.split(/[\+\-\*\/\%]/).pop().includes('.')) {
-                return;
-            }
-            // 开头是0的情况，除非是小数点
+            if (num === '.' && calcExpression.split(/[\+\-\*\/\%]/).pop().includes('.')) return;
             if (calcExpression === '0' && num !== '.') {
                 calcExpression = num;
             } else {
@@ -519,7 +336,6 @@
 
         function appendOperator(op) {
             if (calcExpression === '') return;
-            // 如果最后一个是运算符，直接替换
             const lastChar = calcExpression.slice(-1);
             if (['+', '-', '*', '/', '%'].includes(lastChar)) {
                 calcExpression = calcExpression.slice(0, -1) + op;
@@ -542,7 +358,6 @@
         function calculate() {
             try {
                 let result = eval(calcExpression);
-                // 处理浮点数精度问题，保留8位有效数字
                 result = Math.round(result * 100000000) / 100000000;
                 calcExpression = result.toString();
                 updateDisplay();
@@ -557,15 +372,11 @@
         const notepadStatus = document.getElementById('notepadStatus');
         let saveTimer = null;
 
-        // 加载保存的内容
         function loadNotepad() {
             const saved = localStorage.getItem('notepad_content');
-            if (saved) {
-                notepadText.value = saved;
-            }
+            if (saved) notepadText.value = saved;
         }
 
-        // 自动保存（输入后延迟500ms保存）
         function autoSave() {
             notepadStatus.textContent = '保存中...';
             clearTimeout(saveTimer);
@@ -575,72 +386,43 @@
             }, 500);
         }
 
-        // 清空记事本
         function clearNotepad() {
-            if (confirm('确定要清空所有内容吗？')) {
+            if (confirm('确定清空所有内容？')) {
                 notepadText.value = '';
                 localStorage.removeItem('notepad_content');
                 notepadStatus.textContent = '已清空';
             }
         }
 
-        // 监听输入事件
         notepadText.addEventListener('input', autoSave);
-        // 页面加载时读取内容
         loadNotepad();
+
+        // ========== 谷歌搜索功能 ==========
+        function googleSearch(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            }
+        }
 
         // ========== 数字时钟功能 ==========
         function syncClock(){
-            let now = new Date();
-            let year = now.getFullYear();
-            let month = String(now.getMonth()+1).padStart(2,"0");
-            let day = String(now.getDate()).padStart(2,"0");
-            let weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
-            let week = weekArr[now.getDay()];
-
-            let h = String(now.getHours()).padStart(2,"0");
-            let m = String(now.getMinutes()).padStart(2,"0");
-            let s = String(now.getSeconds()).padStart(2,"0");
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth()+1).padStart(2,"0");
+            const day = String(now.getDate()).padStart(2,"0");
+            const weekArr = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+            const week = weekArr[now.getDay()];
+            const h = String(now.getHours()).padStart(2,"0");
+            const m = String(now.getMinutes()).padStart(2,"0");
+            const s = String(now.getSeconds()).padStart(2,"0");
 
             document.getElementById("dateBox").innerText = `${year}年${month}月${day}日 ${week}`;
             document.getElementById("timeBox").innerText = `${h}:${m}:${s}`;
         }
         syncClock();
         setInterval(syncClock, 1000);
-
-        // ========== 第一套相册JS ==========
-        const preview = document.getElementById("preview");
-        const previewImg = document.getElementById("previewImg");
-        
-        function openPreview(el){
-            previewImg.src = el.querySelector('img').src;
-            preview.style.display = "flex";
-        }
-        
-        function closePreview(){
-            preview.style.display = "none";
-        }
-        
-        preview.addEventListener('click', e => {
-            if(e.target === preview) closePreview();
-        });
-
-        // ========== 第二套相册JS ==========
-        const mask = document.getElementById('mask');
-        const bigImg = document.getElementById('bigImage');
-        
-        function openBigImg(dom) {
-            bigImg.src = dom.querySelector('img').src;
-            mask.style.display = 'flex';
-        }
-        
-        function closeImg() {
-            mask.style.display = 'none';
-        }
-        
-        mask.addEventListener('click', (e) => {
-            if (e.target === mask) closeImg();
-        });
 
         // ========== 计时器功能 ==========
         let timer = null;
@@ -652,7 +434,6 @@
         const pauseBtn = document.getElementById('pauseBtn');
         const resetBtn = document.getElementById('resetBtn');
 
-        // 格式化时间 时:分:秒.毫秒
         function formatTime(ms) {
             const totalSec = Math.floor(ms / 1000);
             const hour = String(Math.floor(totalSec / 3600)).padStart(2, '0');
